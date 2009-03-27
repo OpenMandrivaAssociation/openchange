@@ -8,7 +8,7 @@
 Name: openchange
 Version: 0.8.2
 Release: %mkrel 1
-Group: Applications/System
+Group: Networking/Mail
 Summary: Provides access to Microsoft Exchange servers using native protocols
 License: GPLv3+ and Public Domain
 URL: http://www.openchange.org/
@@ -42,7 +42,7 @@ Shared libraries from the Openchange project implementing the MAPI protocol
 
 %package -n %develname
 Summary: Developer tools for OpenChange libraries
-Group: Development/Libraries
+Group: Development/C
 Requires: %libname >= %version
 Provides: libmapi-devel = %{version}-%{release}
 
@@ -53,7 +53,7 @@ using native protocols.
 
 %package client
 Summary: User tools for OpenChange libraries
-Group: Applications/System
+Group: Networking/Mail
 Requires: openchange = %{version}-%{release}
 
 %description client
