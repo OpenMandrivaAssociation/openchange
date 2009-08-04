@@ -3,16 +3,17 @@
 %define nickname ROMULUS
 %define libname %mklibname mapi 0
 %define develname %mklibname -d mapi
-%global build_server 0
+%define svn_revision 1449
+%global build_server 1
 
 Name: openchange
 Version: 0.8.2
-Release: %mkrel 1
+Release: %mkrel 1.%svn_revision.1
 Group: Networking/Mail
 Summary: Provides access to Microsoft Exchange servers using native protocols
 License: GPLv3+ and Public Domain
 URL: http://www.openchange.org/
-Source0: http://downloads.sourceforge.net/openchange/libmapi-%{version}-%{nickname}.tar.gz
+Source0: http://downloads.sourceforge.net/openchange/libmapi-%{version}.%{svn_revision}.tar.bz2
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires: bison
@@ -36,12 +37,23 @@ BuildRequires: zlib-devel
 OpenChange provides libraries to access Microsoft Exchange servers
 using native protocols.
 
+#--------------------------------------------------------------------
+
 %package -n %libname
 Summary: Openchange shared library supporting the MAPI protocol
 Group: System/Libraries
 
 %description -n %libname
 Shared libraries from the Openchange project implementing the MAPI protocol
+
+%files -n %libname
+%defattr(-,root,root,-)
+%doc ChangeLog COPYING IDL_LICENSE.txt VERSION
+%{_libdir}/libmapi.so.*
+%{_libdir}/libmapiadmin.so.*
+%{_libdir}/libocpf.so.*
+
+#--------------------------------------------------------------------
 
 %package -n %develname
 Summary: Developer tools for OpenChange libraries
@@ -54,6 +66,19 @@ This package provides the development tools and headers for
 OpenChange, providing libraries to access Microsoft Exchange servers
 using native protocols.
 
+%files -n %develname
+%defattr(-,root,root,-)
+%{_libdir}/*.so
+%{_libdir}/pkgconfig
+%{_includedir}/*
+%doc apidocs/html/libmapi
+%doc apidocs/html/libocpf
+%doc apidocs/html/overview
+%doc apidocs/html/index.html
+%{_mandir}/man3/*
+
+#--------------------------------------------------------------------
+
 %package client
 Summary: User tools for OpenChange libraries
 Group: Networking/Mail
@@ -63,6 +88,13 @@ Requires: openchange = %{version}-%{release}
 This package provides the user tools for OpenChange, providing access to
 Microsoft Exchange servers using native protocols.
 
+%files client
+%defattr(-,root,root,-)
+%{_bindir}/*
+%{_mandir}/man1/*
+
+#--------------------------------------------------------------------
+
 %package -n python-openchange
 Summary: Python bindings for OpenChange libraries
 Group: Development/Python
@@ -71,16 +103,36 @@ Requires: openchange = %{version}-%{release}
 %description -n python-openchange
 This module contains a wrapper that allows the use of OpenChange via Python.
 
-# %package server
-# Summary Server side modules for OpenChange
-# Group: Applications/System
-# Requires: samba4
+%files -n python-openchange
+%defattr(0755,root,root,-)
+%{python_sitearch}/openchange
 
-# %description server
-# This package provides the server elements for OpenChange.
+#--------------------------------------------------------------------
+
+%if %build_server
+%package server
+Summary: Server side modules for OpenChange
+Group: Applications/System
+Requires: samba4
+
+%description server
+This package provides the server elements for OpenChange.
+
+%files server
+%defattr(-,root,root,-)
+%{_libdir}/mapistore_backends
+%{_libdir}/libmapiserver.*
+%{_libdir}/libmapistore.*
+%else
+%exclude %{_libdir}/libmapiserver.*
+%exclude %{_libdir}/libmapistore.*
+%exclude %{_libdir}/mapistore_backends
+%endif
+
+#--------------------------------------------------------------------
 
 %prep
-%setup -q -n libmapi-%{version}-%{nickname}
+%setup -q -n libmapi
 
 %build
 %configure
@@ -111,48 +163,3 @@ cp -r apidocs/man/man3 $RPM_BUILD_ROOT%{_mandir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-
-%post -n %libname -p /sbin/ldconfig
-
-%postun -n %libname -p /sbin/ldconfig
-
-%files -n %libname
-%defattr(-,root,root,-)
-%doc ChangeLog COPYING IDL_LICENSE.txt VERSION
-%{_libdir}/libmapi.so.*
-%{_libdir}/libmapiadmin.so.*
-%{_libdir}/libocpf.so.*
-
-%files -n %develname
-%defattr(-,root,root,-)
-%{_libdir}/*.so
-%{_libdir}/pkgconfig
-%{_includedir}/*
-%doc apidocs/html/libmapi
-%doc apidocs/html/libocpf
-%doc apidocs/html/overview
-%doc apidocs/html/index.html
-%{_mandir}/man3/*
-
-%files client
-%defattr(-,root,root,-)
-%{_bindir}/*
-%{_mandir}/man1/*
-
-%files -n python-openchange
-%defattr(0755,root,root,-)
-%{python_sitearch}/openchange
-
-%if %build_server
-# %files server
-# %defattr(-,root,root,-)
-# %{_libdir}/libmapiproxy.so
-# %{_libdir}/dcesrv_mapiproxy.so
-# %{_libdir}/dcesrv_exchange.so
-# %doc doc/howto.txt
-# %doc apidocs/html/mapiproxy
-%else
-%exclude %{_libdir}/libmapiserver.*
-%exclude %{_libdir}/libmapistore.*
-%exclude %{_libdir}/mapistore_backends
-%endif
