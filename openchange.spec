@@ -135,7 +135,7 @@ This package provides the server elements for OpenChange.
 %setup -q -n libmapi
 
 %build
-%configure
+%configure 
 
 # Parallel builds prohibited by makefile
 make
