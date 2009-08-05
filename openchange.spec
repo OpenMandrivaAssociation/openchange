@@ -30,7 +30,7 @@ BuildRequires: samba4-devel >= %{samba4_version}
 BuildRequires: samba-hostconfig-devel
 BuildRequires: dcerpc-devel
 BuildRequires: samba4-pidl >= %{samba4_version}
-BuildRequires: libtevent-devel >= %{samba4_version}
+BuildRequires: tevent-devel >= %{samba4_version}
 BuildRequires: sqlite3-devel
 BuildRequires: zlib-devel
 
