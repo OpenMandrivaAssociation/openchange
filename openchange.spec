@@ -8,7 +8,7 @@
 
 Name: openchange
 Version: 0.8.2
-Release: %mkrel 1.%svn_revision.1
+Release: %mkrel 1.%svn_revision.2
 Group: Networking/Mail
 Summary: Provides access to Microsoft Exchange servers using native protocols
 License: GPLv3+ and Public Domain
@@ -30,7 +30,7 @@ BuildRequires: samba4-devel >= %{samba4_version}
 BuildRequires: samba-hostconfig-devel
 BuildRequires: dcerpc-devel
 BuildRequires: samba4-pidl >= %{samba4_version}
-BuildRequires: tevent-devel >= %{samba4_version}
+BuildRequires: %{_lib}tevent-devel
 BuildRequires: sqlite3-devel
 BuildRequires: zlib-devel
 
