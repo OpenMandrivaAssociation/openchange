@@ -38,21 +38,55 @@ BuildRequires: zlib-devel
 OpenChange provides libraries to access Microsoft Exchange servers
 using native protocols.
 
-#--------------------------------------------------------------------
+#------------------------------------------------
 
-%package -n %libname
+%define mapi_major 0
+%define libmapi %mklibname mapi %mapi_major
+
+%package -n %libmapi
 Summary: Openchange shared library supporting the MAPI protocol
 Group: System/Libraries
 
-%description -n %libname
+%description -n %libmapi
 Shared libraries from the Openchange project implementing the MAPI protocol
 
-%files -n %libname
-%defattr(-,root,root,-)
-%doc ChangeLog COPYING IDL_LICENSE.txt VERSION
-%{_libdir}/libmapi.so.*
-%{_libdir}/libmapiadmin.so.*
-%{_libdir}/libocpf.so.*
+%files -n %libmapi
+%defattr(-,root,root)
+%{_libdir}/libmapi.so.%{mapi_major}*
+
+#------------------------------------------------
+
+%define mapiadmin_major 0
+%define libmapiadmin %mklibname mapiadmin %mapiadmin_major
+
+%package -n %libmapiadmin
+Summary: Openchange shared library supporting the MAPI protocol
+Group: System/Libraries
+Conflicts:  %libname <= 0.8.2-1
+
+%description -n %libmapiadmin
+Shared libraries from the Openchange project implementing the MAPI protocol
+
+%files -n %libmapiadmin
+%defattr(-,root,root)
+%{_libdir}/libmapiadmin.so.%{mapiadmin_major}*
+
+#------------------------------------------------
+
+%define ocpf_major 0
+%define libocpf %mklibname ocpf %ocpf_major
+
+%package -n %libocpf
+Summary: Openchange shared library supporting the MAPI protocol
+Group: System/Libraries
+Conflicts:  %libname <= 0.8.2-1
+
+%description -n %libocpf
+Shared libraries from the Openchange project implementing the MAPI protocol
+
+%files -n %libocpf
+%defattr(-,root,root)
+%{_libdir}/libocpf.so.%{ocpf_major}*
 
 #--------------------------------------------------------------------
 
@@ -91,6 +125,7 @@ Microsoft Exchange servers using native protocols.
 
 %files client
 %defattr(-,root,root,-)
+%doc ChangeLog COPYING IDL_LICENSE.txt VERSION
 %{_bindir}/*
 %{_mandir}/man1/*
 
