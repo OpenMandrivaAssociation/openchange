@@ -1,19 +1,19 @@
-%define samba4_version 4.0.0-0.1.alpha7
+%define samba4_version 4.0.0-0.1.alpha8
 %define talloc_version 1.2.0
 %define nickname ROMULUS
 %define libname %mklibname mapi 0
 %define develname %mklibname -d mapi
-%define svn_revision 1449
+%define svn_revision 1481
 %global build_server 1
 
 Name: openchange
 Version: 0.8.2
-Release: %mkrel 1.%svn_revision.2
+Release: %mkrel 1.%svn_revision.1
 Group: Networking/Mail
 Summary: Provides access to Microsoft Exchange servers using native protocols
 License: GPLv3+ and Public Domain
 URL: http://www.openchange.org/
-Source0: http://downloads.sourceforge.net/openchange/libmapi-%{version}.%{svn_revision}.tar.bz2
+Source0: http://downloads.sourceforge.net/openchange/libmapi-%{version}.%{svn_revision}.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires: bison
@@ -117,7 +117,9 @@ using native protocols.
 %package client
 Summary: User tools for OpenChange libraries
 Group: Networking/Mail
-Requires: openchange = %{version}-%{release}
+Requires: %libmapi = %{version}-%{release}
+Requires: %libmapiadmin = %{version}-%{release}
+Requires: %libocpf = %{version}-%{release}
 
 %description client
 This package provides the user tools for OpenChange, providing access to
@@ -134,7 +136,7 @@ Microsoft Exchange servers using native protocols.
 %package -n python-openchange
 Summary: Python bindings for OpenChange libraries
 Group: Development/Python
-Requires: openchange = %{version}-%{release}
+Requires: openchange-client = %{version}-%{release}
 
 %description -n python-openchange
 This module contains a wrapper that allows the use of OpenChange via Python.
@@ -171,31 +173,32 @@ This package provides the server elements for OpenChange.
 %setup -q -n libmapi
 
 %build
-%configure 
+./autogen.sh
+%configure2_5x
 
 # Parallel builds prohibited by makefile
 make
 make doxygen
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
+rm -rf %{buildroot}
+make install DESTDIR=%{buildroot}
 
-cp -r libmapi++ $RPM_BUILD_ROOT%{_includedir}
+cp -r libmapi++ %{buildroot}%{_includedir}
 
-rm -rf $RPM_BUILD_ROOT%{_libdir}/nagios/check_exchange
-rm -rf $RPM_BUILD_ROOT%{_prefix}/modules
-rm -rf $RPM_BUILD_ROOT%{_datadir}/js
-rm -rf $RPM_BUILD_ROOT%{_datadir}/setup
-rm -rf $RPM_BUILD_ROOT%{_libdir}/libmapiproxy.so.*
+rm -rf %{buildroot}%{_libdir}/nagios/check_exchange
+rm -rf %{buildroot}%{_prefix}/modules
+rm -rf %{buildroot}%{_datadir}/js
+rm -rf %{buildroot}%{_datadir}/setup
+rm -rf %{buildroot}%{_libdir}/libmapiproxy.so.*
 
 # This makes the right links, as rpmlint requires that the
 # ldconfig-created links be recorded in the RPM.
-/sbin/ldconfig -N -n $RPM_BUILD_ROOT/%{_libdir}
+/sbin/ldconfig -N -n %{buildroot}/%{_libdir}
 
-mkdir $RPM_BUILD_ROOT%{_mandir}
-cp -r doc/man/man1 $RPM_BUILD_ROOT%{_mandir}
-cp -r apidocs/man/man3 $RPM_BUILD_ROOT%{_mandir}
+mkdir %{buildroot}%{_mandir}
+cp -r doc/man/man1 %{buildroot}%{_mandir}
+cp -r apidocs/man/man3 %{buildroot}%{_mandir}
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
