@@ -8,7 +8,7 @@
 
 Name: openchange
 Version: 0.8.2
-Release: %mkrel 1.%svn_revision.1
+Release: %mkrel 1.%svn_revision.2
 Group: Networking/Mail
 Summary: Provides access to Microsoft Exchange servers using native protocols
 License: GPLv3+ and Public Domain
