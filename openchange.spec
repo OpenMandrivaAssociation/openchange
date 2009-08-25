@@ -8,7 +8,7 @@
 
 Name: openchange
 Version: 0.8.2
-Release: %mkrel 1.%svn_revision.2
+Release: %mkrel 1.%svn_revision.3
 Group: Networking/Mail
 Summary: Provides access to Microsoft Exchange servers using native protocols
 License: GPLv3+ and Public Domain
@@ -150,7 +150,7 @@ This module contains a wrapper that allows the use of OpenChange via Python.
 %if %build_server
 %package server
 Summary: Server side modules for OpenChange
-Group: Applications/System
+Group: System/Servers
 Requires: samba4
 
 %description server
