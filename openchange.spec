@@ -179,12 +179,12 @@ This package provides the server elements for OpenChange.
 %configure2_5x
 
 # Parallel builds prohibited by makefile
-%make
-%make doxygen
+make
+make doxygen
 
 %install
 rm -rf %{buildroot}
-%makeinstall DESTDIR=%{buildroot}
+make install DESTDIR=%{buildroot}
 
 cp -r libmapi++ %{buildroot}%{_includedir}
 
