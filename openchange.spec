@@ -175,15 +175,16 @@ This package provides the server elements for OpenChange.
 
 %build
 #./autogen.sh
+%define _disable_ld_no_undefined 1
 %configure2_5x
 
 # Parallel builds prohibited by makefile
-make
-make doxygen
+%make
+%make doxygen
 
 %install
 rm -rf %{buildroot}
-make install DESTDIR=%{buildroot}
+%makeinstall DESTDIR=%{buildroot}
 
 cp -r libmapi++ %{buildroot}%{_includedir}
 
