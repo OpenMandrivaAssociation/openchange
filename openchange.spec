@@ -1,19 +1,18 @@
-%define samba4_version 4.0.0-0.1.alpha8
+%define samba4_version 4.0.0-0.1.alpha10
 %define talloc_version 1.2.0
-%define nickname ROMULUS
+%define nickname COCHRANE
 %define libname %mklibname mapi 0
 %define develname %mklibname -d mapi
-%define svn_revision 1481
 %global build_server 1
 
 Name: openchange
-Version: 0.8.2
-Release: %mkrel 1.%svn_revision.3
+Version: 0.9
+Release: %mkrel 1
 Group: Networking/Mail
 Summary: Provides access to Microsoft Exchange servers using native protocols
 License: GPLv3+ and Public Domain
 URL: http://www.openchange.org/
-Source0: http://downloads.sourceforge.net/openchange/libmapi-%{version}.%{svn_revision}.tar.xz
+Source0: http://downloads.sourceforge.net/openchange/%{name}-%{version}-%{nickname}.tar.gz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires: bison
@@ -33,6 +32,8 @@ BuildRequires: samba4-pidl >= %{samba4_version}
 BuildRequires: %{_lib}tevent-devel
 BuildRequires: sqlite3-devel
 BuildRequires: zlib-devel
+BuildRequires: libical-devel
+BuildRequires: boost-devel
 
 %description
 OpenChange provides libraries to access Microsoft Exchange servers
@@ -170,10 +171,10 @@ This package provides the server elements for OpenChange.
 #--------------------------------------------------------------------
 
 %prep
-%setup -q -n libmapi
+%setup -q -n %{name}-%{version}-%{nickname}
 
 %build
-./autogen.sh
+#./autogen.sh
 %configure2_5x
 
 # Parallel builds prohibited by makefile
