@@ -7,7 +7,7 @@
 
 Name: openchange
 Version: 0.9
-Release: %mkrel 1
+Release: %mkrel 2
 Group: Networking/Mail
 Summary: Provides access to Microsoft Exchange servers using native protocols
 License: GPLv3+ and Public Domain
@@ -29,7 +29,7 @@ BuildRequires: samba4-devel >= %{samba4_version}
 BuildRequires: samba-hostconfig-devel
 BuildRequires: dcerpc-devel
 BuildRequires: samba4-pidl >= %{samba4_version}
-BuildRequires: %{_lib}tevent-devel
+BuildRequires: tevent-devel
 BuildRequires: sqlite3-devel
 BuildRequires: zlib-devel
 BuildRequires: libical-devel
@@ -94,7 +94,12 @@ Shared libraries from the Openchange project implementing the MAPI protocol
 %package -n %develname
 Summary: Developer tools for OpenChange libraries
 Group: Development/C
-Requires: %libname >= %version
+Requires: %libmapi = %{version}-%{release}
+Requires: %libmapiadmin = %{version}-%{release}
+Requires: %libocpf = %{version}-%{release}
+%if %build_server
+Requires: %{name}-server = %{version}-%{release}
+%endif
 Provides: libmapi-devel = %{version}-%{release}
 
 %description -n %develname
@@ -162,10 +167,6 @@ This package provides the server elements for OpenChange.
 %{_libdir}/mapistore_backends
 %{_libdir}/libmapiserver.*
 %{_libdir}/libmapistore.*
-%else
-%exclude %{_libdir}/libmapiserver.*
-%exclude %{_libdir}/libmapistore.*
-%exclude %{_libdir}/mapistore_backends
 %endif
 
 #--------------------------------------------------------------------
