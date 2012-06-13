@@ -1,13 +1,13 @@
-%define samba4_version 4.0.0-0.1.alpha10
+%define samba4_version 4.0.0-0.1.alpha18
 %define talloc_version 1.2.0
-%define nickname COCHRANE
+%define nickname BORG
 %define libname %mklibname mapi 0
 %define develname %mklibname -d mapi
 %global build_server 1
 
 Name: openchange
-Version: 0.9
-Release: %mkrel 2
+Version: 1.0
+Release: 1
 Group: Networking/Mail
 Summary: Provides access to Microsoft Exchange servers using native protocols
 License: GPLv3+ and Public Domain
