@@ -44,7 +44,7 @@ using native protocols.
 
 #------------------------------------------------
 
-%define mapi_major 1
+%define mapi_major 0
 %define libmapi %mklibname mapi %mapi_major
 
 %package -n %libmapi
@@ -57,10 +57,12 @@ Shared libraries from the Openchange project implementing the MAPI protocol
 %files -n %libmapi
 %defattr(-,root,root)
 %{_libdir}/libmapi.so.%{mapi_major}*
-
+%{_libdir}/libmapi.so.1*
+%{_libdir}/libmapipp.so.%{mapi_major}*
+%{_libdir}/libmapipp.so.1*
 #------------------------------------------------
 
-%define mapiadmin_major 1
+%define mapiadmin_major 0
 %define libmapiadmin %mklibname mapiadmin %mapiadmin_major
 
 %package -n %libmapiadmin
@@ -74,10 +76,11 @@ Shared libraries from the Openchange project implementing the MAPI protocol
 %files -n %libmapiadmin
 %defattr(-,root,root)
 %{_libdir}/libmapiadmin.so.%{mapiadmin_major}*
+%{_libdir}/libmapiadmin.so.1*
 
 #------------------------------------------------
 
-%define ocpf_major 1
+%define ocpf_major 0
 %define libocpf %mklibname ocpf %ocpf_major
 
 %package -n %libocpf
@@ -91,6 +94,7 @@ Shared libraries from the Openchange project implementing the MAPI protocol
 %files -n %libocpf
 %defattr(-,root,root)
 %{_libdir}/libocpf.so.%{ocpf_major}*
+%{_libdir}/libocpf.so.1*
 
 #--------------------------------------------------------------------
 
