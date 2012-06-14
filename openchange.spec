@@ -7,7 +7,7 @@
 
 Name: openchange
 Version: 1.0
-Release: 1
+Release: 2
 Group: Networking/Mail
 Summary: Provides access to Microsoft Exchange servers using native protocols
 License: GPLv3+ and Public Domain
