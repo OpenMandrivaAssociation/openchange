@@ -26,6 +26,7 @@ BuildRequires: pkgconfig
 BuildRequires: popt-devel
 BuildRequires: python-devel
 BuildRequires: samba4-devel >= %{samba4_version}
+BuildRequires: samba-util-devel
 BuildRequires: samba-hostconfig-devel
 BuildRequires: dcerpc-devel
 BuildRequires: samba4-pidl >= %{samba4_version}
