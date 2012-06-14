@@ -17,7 +17,7 @@ BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires: bison
 BuildRequires: doxygen
-BuildRequires: file-devel
+BuildRequires: magic-devel
 BuildRequires: flex
 BuildRequires: talloc-devel >= %{talloc_version}
 BuildRequires: tdb-devel
