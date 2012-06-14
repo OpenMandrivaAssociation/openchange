@@ -13,6 +13,7 @@ Summary: Provides access to Microsoft Exchange servers using native protocols
 License: GPLv3+ and Public Domain
 URL: http://www.openchange.org/
 Source0: http://downloads.sourceforge.net/openchange/%{name}-%{version}-%{nickname}.tar.gz
+Patch0: openchange-1.0-popt.patch
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires: bison
@@ -174,6 +175,7 @@ This package provides the server elements for OpenChange.
 
 %prep
 %setup -q -n %{name}-%{version}-%{nickname}
+%patch0 -p1
 
 %build
 #./autogen.sh
