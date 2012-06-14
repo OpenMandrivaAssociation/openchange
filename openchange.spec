@@ -1,7 +1,7 @@
 %define samba4_version 4.0.0-0.1.alpha18
 %define talloc_version 1.2.0
 %define nickname BORG
-%define libname %mklibname mapi 0
+%define libname %mklibname mapi 1
 %define develname %mklibname -d mapi
 %global build_server 1
 
@@ -44,7 +44,7 @@ using native protocols.
 
 #------------------------------------------------
 
-%define mapi_major 0
+%define mapi_major 1
 %define libmapi %mklibname mapi %mapi_major
 
 %package -n %libmapi
@@ -60,7 +60,7 @@ Shared libraries from the Openchange project implementing the MAPI protocol
 
 #------------------------------------------------
 
-%define mapiadmin_major 0
+%define mapiadmin_major 1
 %define libmapiadmin %mklibname mapiadmin %mapiadmin_major
 
 %package -n %libmapiadmin
@@ -77,7 +77,7 @@ Shared libraries from the Openchange project implementing the MAPI protocol
 
 #------------------------------------------------
 
-%define ocpf_major 0
+%define ocpf_major 1
 %define libocpf %mklibname ocpf %ocpf_major
 
 %package -n %libocpf
@@ -113,6 +113,8 @@ using native protocols.
 %files -n %develname
 %defattr(-,root,root,-)
 %{_libdir}/*.so
+%exclude %{_libdir}/libmapiserver.so
+%exclude %{_libdir}/libmapistore.so
 %{_libdir}/pkgconfig
 %{_includedir}/*
 %doc apidocs/html/libmapi
@@ -196,8 +198,9 @@ rm -rf %{buildroot}%{_libdir}/nagios/check_exchange
 rm -rf %{buildroot}%{_prefix}/modules
 rm -rf %{buildroot}%{_datadir}/js
 rm -rf %{buildroot}%{_datadir}/setup
+rm -rf %{buildroot}%{_datadir}/mapitest
 rm -rf %{buildroot}%{_libdir}/libmapiproxy.so.*
-
+rm -rf %{buildroot}%{_libdir}/samba4/dcerpc_server/dcesrv_mapiproxy.so
 # This makes the right links, as rpmlint requires that the
 # ldconfig-created links be recorded in the RPM.
 /sbin/ldconfig -N -n %{buildroot}/%{_libdir}
