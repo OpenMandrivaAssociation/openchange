@@ -166,7 +166,7 @@ This module contains a wrapper that allows the use of OpenChange via Python.
 %package server
 Summary: Server side modules for OpenChange
 Group: System/Servers
-Requires: samba4
+Requires: samba4-server
 
 %description server
 This package provides the server elements for OpenChange.
