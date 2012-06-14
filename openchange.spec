@@ -167,7 +167,6 @@ This package provides the server elements for OpenChange.
 
 %files server
 %defattr(-,root,root,-)
-%{_libdir}/mapistore_backends
 %{_libdir}/libmapiserver.*
 %{_libdir}/libmapistore.*
 %endif
