@@ -1,19 +1,18 @@
 %define samba4_version 4.0.0-0.1.alpha18
 %define talloc_version 1.2.0
-%define nickname BORG
+%define nickname NANOPROBE
 %define libname %mklibname mapi 1
 %define devname %mklibname -d mapi
-%global build_server 1
 
-Summary:	Provides access to Microsoft Exchange servers using native protocols
+Summary:	Library for communicating with M$ Exchange and Outlook
 Name:		openchange
-Version:	1.0
-Release:	3
+Version:	2.2
+Release:	1
 Group:		Networking/Mail
 License:	GPLv3+ and Public Domain
 URL:		http://www.openchange.org/
-Source0:	http://downloads.sourceforge.net/openchange/%{name}-%{version}-%{nickname}.tar.gz
-Patch0:		openchange-1.0-popt.patch
+Source0:	http://tracker.openchange.org/attachments/download/246/%{name}-%{version}-%{nickname}.tar.gz
+Patch0:		openchange-2.2-linkage.patch
 
 BuildRequires:	bison
 BuildRequires:	doxygen
@@ -23,22 +22,45 @@ BuildRequires:	talloc-devel >= %{talloc_version}
 BuildRequires:	tdb-devel
 BuildRequires:	ldb-devel
 BuildRequires:	popt-devel
-BuildRequires:	python-devel
 BuildRequires:	samba-devel >= %{samba4_version}
-BuildRequires:	samba-util-devel
-BuildRequires:	samdbdevel
-BuildRequires:	samba-hostconfig-devel
-BuildRequires:	dcerpc-devel
 BuildRequires:	samba-pidl >= %{samba4_version}
 BuildRequires:	tevent-devel
 BuildRequires:	sqlite3-devel
 BuildRequires:	zlib-devel
 BuildRequires:	libical-devel
 BuildRequires:	boost-devel
+BuildRequires:	pkgconfig(samba-hostconfig)
+BuildRequires:	pkgconfig(samba-credentials)
+BuildRequires:	pkgconfig(dcerpc)
+BuildRequires:	pkgconfig(samdb)
+BuildRequires:	qt4-devel
+BuildRequires:	mariadb-common
+BuildRequires:	pkgconfig(mariadb)
+BuildRequires:	python2-devel
 
 %description
-OpenChange provides libraries to access Microsoft Exchange servers
-using native protocols.
+OpenChange is a portable Open Source implementation of Microsoft
+Exchange server and Exchange protocols. It provides a complete
+solution to interoperate with Microsoft Outlook clients or
+Microsoft Exchange servers.
+
+OpenChange client-side library is used in existing messaging
+clients and is the solution in new projects to communicate natively
+with Microsoft Exchange and Exchange-compatible servers. OpenChange
+server is a transparent Microsoft Exchange server replacement using
+native Exchange protocols and does not require any plugin installation
+in Outlook.
+
+#------------------------------------------------
+%package -n nagios-%{name}
+Summary:	NAGIOS module for checking %{name} integrity
+Group:		System/Libraries
+
+%description -n nagios-%{name}
+NAGIOS module for checking %{name} integrity
+
+%files -n nagios-%{name}
+%{_libdir}/nagios/check_exchange
 
 #------------------------------------------------
 
@@ -50,13 +72,14 @@ Summary:	Openchange shared library supporting the MAPI protocol
 Group:		System/Libraries
 
 %description -n %libmapi
-Shared libraries from the Openchange project implementing the MAPI protocol
+Shared libraries from the Openchange project implementing
+the MAPI protocol
 
 %files -n %libmapi
 %{_libdir}/libmapi.so.%{mapi_major}*
-%{_libdir}/libmapi.so.1*
+%{_libdir}/libmapi.so.%{version}
 %{_libdir}/libmapipp.so.%{mapi_major}*
-%{_libdir}/libmapipp.so.1*
+%{_libdir}/libmapipp.so.%{version}
 #------------------------------------------------
 
 %define mapiadmin_major 0
@@ -68,11 +91,64 @@ Group:		System/Libraries
 Conflicts:	%{libname} <= 0.8.2-1
 
 %description -n %libmapiadmin
-Shared libraries from the Openchange project implementing the MAPI protocol
+Shared libraries from the Openchange project implementing
+the MAPI protocol
 
 %files -n %libmapiadmin
 %{_libdir}/libmapiadmin.so.%{mapiadmin_major}*
-%{_libdir}/libmapiadmin.so.1*
+%{_libdir}/libmapiadmin.so.%{version}
+
+#------------------------------------------------
+
+%define mapiproxy_major 0
+%define libmapiproxy %mklibname mapiproxy %mapiproxy_major
+
+%package -n %libmapiproxy
+Summary:	Openchange shared library supporting the MAPI Proxy protocol
+Group:		System/Libraries
+
+%description -n %libmapiproxy
+Shared libraries from the Openchange project implementing
+the MAPI Proxy protocol
+
+%files -n %libmapiproxy
+%{_libdir}/libmapiproxy.so.%{mapiproxy_major}*
+%{_libdir}/libmapiproxy.so.%{version}
+
+
+#------------------------------------------------
+
+%define mapiserver_major 0
+%define libmapiserver %mklibname mapiserver %mapiserver_major
+
+%package -n %libmapiserver
+Summary:	Openchange shared library supporting the MAPI Server protocol
+Group:		System/Libraries
+
+%description -n %libmapiserver
+Shared libraries from the Openchange project implementing
+the MAPI Server protocol
+
+%files -n %libmapiserver
+%{_libdir}/libmapiserver.so.%{mapiserver_major}*
+%{_libdir}/libmapiserver.so.%{version}
+
+#------------------------------------------------
+
+%define mapistore_major 0
+%define libmapistore %mklibname mapistore %mapistore_major
+
+%package -n %libmapistore
+Summary:	Openchange shared library supporting the MAPI Store protocol
+Group:		System/Libraries
+
+%description -n %libmapistore
+Shared libraries from the Openchange project implementing
+the MAPI Store protocol
+
+%files -n %libmapistore
+%{_libdir}/libmapistore.so.%{mapistore_major}*
+%{_libdir}/libmapistore.so.%{version}
 
 #------------------------------------------------
 
@@ -85,24 +161,25 @@ Group:		System/Libraries
 Conflicts:	%{libname} <= 0.8.2-1
 
 %description -n %libocpf
-Shared libraries from the Openchange project implementing the MAPI protocol
+Shared libraries from the Openchange project implementing
+the MAPI protocol
 
 %files -n %libocpf
 %{_libdir}/libocpf.so.%{ocpf_major}*
-%{_libdir}/libocpf.so.1*
+%{_libdir}/libocpf.so.%{version}
 
 #--------------------------------------------------------------------
 
 %package -n %{devname}
 Summary:	Developer tools for OpenChange libraries
 Group:		Development/C
-Requires:	%libmapi = %{version}-%{release}
-Requires:	%libmapiadmin = %{version}-%{release}
-Requires:	%libocpf = %{version}-%{release}
-%if %build_server
-Requires:	%{name}-server = %{version}-%{release}
-%endif
-Provides:	libmapi-devel = %{version}-%{release}
+Requires:	%libmapi = %{EVRD}
+Requires:	%libmapiadmin = %{EVRD}
+Requires:	%libocpf = %{EVRD}
+Requires:	%libmapiserver = %{EVRD}
+Requires:	%libmapistore = %{EVRD}
+Provides:	libmapi-devel = %{EVRD}
+%define __noautoreq 'devel.*libndr-samba'
 
 %description -n %{devname}
 This package provides the development tools and headers for
@@ -111,8 +188,6 @@ using native protocols.
 
 %files -n %{devname}
 %{_libdir}/*.so
-%exclude %{_libdir}/libmapiserver.so
-%exclude %{_libdir}/libmapistore.so
 %{_libdir}/pkgconfig
 %{_includedir}/*
 %doc apidocs/html/libmapi
@@ -135,66 +210,77 @@ This package provides the user tools for OpenChange, providing access to
 Microsoft Exchange servers using native protocols.
 
 %files client
-%doc ChangeLog COPYING IDL_LICENSE.txt VERSION
+%doc COPYING IDL_LICENSE.txt VERSION
 %{_bindir}/*
 %{_mandir}/man1/*
 
 #--------------------------------------------------------------------
 
-%package -n python-openchange
-Summary:	Python bindings for OpenChange libraries
+%package -n python2-openchange
+Summary:	Python 2.x bindings for OpenChange libraries
 Group:		Development/Python
 Requires:	openchange-client = %{version}-%{release}
 
-%description -n python-openchange
+%description -n python2-openchange
 This module contains a wrapper that allows the use of OpenChange via Python.
 
-%files -n python-openchange
-%{python_sitearch}/openchange
+%files -n python2-openchange
+%{python2_sitearch}/openchange
 
 #--------------------------------------------------------------------
 
-%if %build_server
 %package server
 Summary:	Server side modules for OpenChange
 Group:		System/Servers
-Requires:	samba4-server
+Requires:	samba-server >= 4.0
+Requires:	%libmapiserver = %{EVRD}
+Requires:	%libmapistore = %{EVRD}
 
 %description server
 This package provides the server elements for OpenChange.
 
 %files server
-%{_libdir}/libmapiserver.*
-%{_libdir}/libmapistore.*
-%endif
+%{_libdir}/openchange/modules
+%{_sbindir}/openchange_newuser
+%{_sbindir}/openchange_provision
+%{_libdir}/samba/dcerpc_server/dcesrv_mapiproxy.so
+%{_datadir}/samba/setup/AD
+%{_datadir}/samba/setup/mapistore
+%{_datadir}/samba/setup/openchangedb
+%{_datadir}/samba/setup/profiles
+%{_datadir}/mapitest
 
 #--------------------------------------------------------------------
 
 %prep
 %setup -qn %{name}-%{version}-%{nickname}
 %apply_patches
+# Configure @LIBDIR@ bits introduced by patch 1
+sed -i -e 's,@LIBDIR@,%{_libdir},g' Makefile
+# Share the setup dir with samba
+sed -i -e 's,$(datadir)/setup,$(datadir)/samba/setup,g' Makefile config.mk.in
 
 %build
 #./autogen.sh
 %define _disable_ld_no_undefined 1
-%configure2_5x
+find . -name "*.py" |xargs sed -i -e 's,#!/usr/bin/python,#!/usr/bin/python2,'
+export PYTHON=%{_bindir}/python2
+export PYTHON_CONFIG=%{_bindir}/python2-config
+%configure \
+	--with-modulesdir=%{_libdir}/openchange/modules \
+	--enable-pyopenchange \
+	--enable-openchange-qt4
+
 
 # Parallel builds prohibited by makefile
-make
+%make
 make doxygen
 
 %install
-%makeinstall_std
+%makeinstall_std samba_setupdir=%{_datadir}/samba/setup
 
-cp -r libmapi++ %{buildroot}%{_includedir}
+#cp -r libmapi++ %{buildroot}%{_includedir}
 
-rm -rf %{buildroot}%{_libdir}/nagios/check_exchange
-rm -rf %{buildroot}%{_prefix}/modules
-rm -rf %{buildroot}%{_datadir}/js
-rm -rf %{buildroot}%{_datadir}/setup
-rm -rf %{buildroot}%{_datadir}/mapitest
-rm -rf %{buildroot}%{_libdir}/libmapiproxy.so.*
-rm -rf %{buildroot}%{_libdir}/samba4/dcerpc_server/dcesrv_mapiproxy.so
 # This makes the right links, as rpmlint requires that the
 # ldconfig-created links be recorded in the RPM.
 /sbin/ldconfig -N -n %{buildroot}/%{_libdir}
@@ -202,4 +288,3 @@ rm -rf %{buildroot}%{_libdir}/samba4/dcerpc_server/dcesrv_mapiproxy.so
 mkdir %{buildroot}%{_mandir}
 cp -r doc/man/man1 %{buildroot}%{_mandir}
 cp -r apidocs/man/man3 %{buildroot}%{_mandir}
-
