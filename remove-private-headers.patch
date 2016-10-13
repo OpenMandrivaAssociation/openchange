@@ -1,0 +1,28 @@
+--- openchange-openchange-2.3-VULCAN/libmapiadmin/mapiadmin_user.c.0014~	2016-10-13 16:41:29.471291882 +0200
++++ openchange-openchange-2.3-VULCAN/libmapiadmin/mapiadmin_user.c	2016-10-13 16:43:30.941721807 +0200
+@@ -30,13 +30,14 @@
+ #include <credentials.h>
+ #include <ldb_errors.h>
+ #include <ldb_wrap.h>
+-#include <ldap_ndr.h>
+ 
+ #include <gen_ndr/ndr_samr.h>
+ #include <gen_ndr/ndr_samr_c.h>
+ 
+ #include <time.h>
+ 
++extern char *ldap_encode_ndr_dom_sid(TALLOC_CTX *mem_ctx, const struct dom_sid *sid);
++
+ /**
+ 	\file
+ 	User management functions for mapiadmin
+--- openchange-openchange-2.3-VULCAN/mapiproxy/servers/default/emsmdb/emsmdbp.c.0014~	2015-05-16 17:22:04.000000000 +0200
++++ openchange-openchange-2.3-VULCAN/mapiproxy/servers/default/emsmdb/emsmdbp.c	2016-10-13 16:41:29.471291882 +0200
+@@ -31,7 +31,6 @@
+ #include "mapiproxy/libmapiserver/libmapiserver.h"
+ #include "mapiproxy/libmapiproxy/fault_util.h"
+ 
+-#include <ldap_ndr.h>
+ 
+ /* Expose samdb_connect prototype */
+ struct ldb_context *samdb_connect(TALLOC_CTX *, struct tevent_context *,

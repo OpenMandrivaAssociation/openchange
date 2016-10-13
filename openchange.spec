@@ -1,18 +1,26 @@
 %define samba4_version 4.0.0-0.1.alpha18
 %define talloc_version 1.2.0
-%define nickname NANOPROBE
+%define nickname VULCAN
 %define libname %mklibname mapi 1
 %define devname %mklibname -d mapi
 
 Summary:	Library for communicating with M$ Exchange and Outlook
 Name:		openchange
-Version:	2.2
+Version:	2.3
 Release:	1
 Group:		Networking/Mail
 License:	GPLv3+ and Public Domain
 URL:		http://www.openchange.org/
-Source0:	http://tracker.openchange.org/attachments/download/246/%{name}-%{version}-%{nickname}.tar.gz
+Source0:	https://github.com/openchange/openchange/archive/openchange-%{version}-%{nickname}.tar.gz
 Patch0:		openchange-2.2-linkage.patch
+# 10-19 "borrowed" from Arch Linux AUR
+Patch10:	nanomsg-0.9.patch
+Patch11:	openchange-issue-249.patch
+Patch12:	openchange-provision-type-error.patch
+Patch13:	yyunput_flex2.6.patch
+Patch14:	remove-private-headers.patch
+#Patch15:	openchange-add_SizedXid-1.patch
+Patch20:	openchange-2.3-samba-4.5.patch
 
 BuildRequires:	bison
 BuildRequires:	doxygen
@@ -29,6 +37,7 @@ BuildRequires:	sqlite3-devel
 BuildRequires:	zlib-devel
 BuildRequires:	libical-devel
 BuildRequires:	boost-devel
+BuildRequires:	flex-devel
 BuildRequires:	pkgconfig(samba-hostconfig)
 BuildRequires:	pkgconfig(samba-credentials)
 BuildRequires:	pkgconfig(dcerpc)
@@ -242,8 +251,12 @@ This package provides the server elements for OpenChange.
 %files server
 %{_libdir}/openchange/modules
 %{_sbindir}/openchange_newuser
+%{_sbindir}/openchange_group
+%{_sbindir}/openchange_migrate
+%{_sbindir}/openchange_neworganization
 %{_sbindir}/openchange_provision
 %{_libdir}/samba/dcerpc_server/dcesrv_mapiproxy.so
+%{_libdir}/samba/dcerpc_server/dcesrv_asyncemsmdb.so
 %{_datadir}/samba/setup/AD
 %{_datadir}/samba/setup/mapistore
 %{_datadir}/samba/setup/openchangedb
@@ -253,12 +266,13 @@ This package provides the server elements for OpenChange.
 #--------------------------------------------------------------------
 
 %prep
-%setup -qn %{name}-%{version}-%{nickname}
+%setup -qn %{name}-%{name}-%{version}-%{nickname}
 %apply_patches
 # Configure @LIBDIR@ bits introduced by patch 1
 sed -i -e 's,@LIBDIR@,%{_libdir},g' Makefile
 # Share the setup dir with samba
 sed -i -e 's,$(datadir)/setup,$(datadir)/samba/setup,g' Makefile config.mk.in
+[ -e configure ] || ./autogen.sh
 
 %build
 #./autogen.sh
