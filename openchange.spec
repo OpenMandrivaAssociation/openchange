@@ -42,7 +42,7 @@ BuildRequires:	pkgconfig(samba-hostconfig)
 BuildRequires:	pkgconfig(samba-credentials)
 BuildRequires:	pkgconfig(dcerpc)
 BuildRequires:	pkgconfig(samdb)
-BuildRequires:	qt4-devel
+#BuildRequires:	qt4-devel
 BuildRequires:	mariadb-common
 BuildRequires:	pkgconfig(mariadb)
 BuildRequires:	python2-devel
