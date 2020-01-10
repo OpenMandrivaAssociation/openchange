@@ -267,7 +267,7 @@ This package provides the server elements for OpenChange.
 
 %prep
 %setup -qn %{name}-%{name}-%{version}-%{nickname}
-%apply_patches
+%autopatch -p1
 # Configure @LIBDIR@ bits introduced by patch 1
 sed -i -e 's,@LIBDIR@,%{_libdir},g' Makefile
 # Share the setup dir with samba
