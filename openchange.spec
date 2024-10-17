@@ -10,7 +10,7 @@ Version:	2.3
 Release:	1
 Group:		Networking/Mail
 License:	GPLv3+ and Public Domain
-URL:		http://www.openchange.org/
+URL:		https://www.openchange.org/
 Source0:	https://github.com/openchange/openchange/archive/openchange-%{version}-%{nickname}.tar.gz
 Patch0:		openchange-2.2-linkage.patch
 # 10-19 "borrowed" from Arch Linux AUR
