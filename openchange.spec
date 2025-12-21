@@ -22,6 +22,11 @@ Patch14:	remove-private-headers.patch
 #Patch15:	openchange-add_SizedXid-1.patch
 Patch20:	openchange-2.3-samba-4.5.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	bison
 BuildRequires:	doxygen
 BuildRequires:	flex
